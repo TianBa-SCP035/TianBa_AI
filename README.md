@@ -1,4 +1,4 @@
-# <img src="Web/apps/web-antd/public/favicon.ico" alt="TianBa AI Logo" width="40" style="vertical-align: middle; margin-right: 10px;"> TianBa AI - 智能科研工具集成平台
+# <div align="center"><img src="Web/apps/web-antd/public/favicon.ico" alt="TianBa AI Logo" width="40" style="vertical-align: middle; margin-right: 10px;"> TianBa AI - 智能科研工具集成平台</div>
 
 <div align="center">
   [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
