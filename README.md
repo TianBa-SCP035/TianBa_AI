@@ -1,13 +1,20 @@
-<div>
+<p align="center">
   <img src="Web/apps/web-antd/public/favicon.ico" alt="TianBa AI Logo" width="60" style="vertical-align: middle; margin-right: 15px;">
-  <span style="vertical-align: middle; font-size: 2em; font-weight: bold;">TianBa AI - 智能科研工具集成平台</span>
-</div>
+</p>
 
-<div align="center">
-[![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://python.org)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](https://github.com/TianBa-SCP035/TianBa_AI)
-</div>
+<h1 align="center">TianBa AI - 智能科研工具集成平台</h1>
+
+<p align="center">
+  <a href="https://python.org">
+    <img src="https://img.shields.io/badge/python-3.8%2B-blue.svg" alt="Python">
+  </a>
+  <a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
+  </a>
+  <a href="https://github.com/TianBa-SCP035/TianBa_AI">
+    <img src="https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg" alt="Platform">
+  </a>
+</p>
 
 
 ## 🎯 项目简介
@@ -319,7 +326,7 @@ POST /api/v1/translation/document
 
 ---
 
-<div align="center">
+<p align="center">
   <p>🧬 专注于AI驱动的科研创新 🧬</p>
   <p>© 2025 TianBa AI. All rights reserved.</p>
   <p>
@@ -327,4 +334,4 @@ POST /api/v1/translation/document
     <a href="https://tianba-ai.com">官方网站</a> • 
     <a href="https://docs.tianba-ai.com">文档中心</a>
   </p>
-</div>
+</p>
