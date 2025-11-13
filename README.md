@@ -1,6 +1,6 @@
 <h1>
-  <img src="Web/apps/web-antd/public/favicon.ico" alt="TianBa AI Logo" width="45" style="vertical-align: middle; margin-right: 15px;">
-  TianBa AI - 智能科研工具集成平台
+  <img src="Web/apps/web-antd/public/favicon.ico" alt="TianBa AI Logo" width="50" style="vertical-align: middle; margin-right: 20px;">
+  TianBa AI - 智能科研平台
 </h1>
 
 <p align="center">
