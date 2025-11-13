@@ -1,5 +1,5 @@
 <h1 style="font-size: 3em;">
-  <img src="Web/apps/web-antd/public/favicon.ico" alt="TianBa AI Logo" width="50"  margin-right: 30px; vertical-align: middle;">
+  <img src="Web/apps/web-antd/public/favicon.ico" alt="TianBa AI Logo" width="50"  margin-right: 40px; vertical-align: middle;">
   TianBa AI - 智能科研平台
 </h1>
 
