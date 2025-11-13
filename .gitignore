@@ -7,7 +7,7 @@ __pycache__/
 Code/docs/logs/
 Code/docs/output/
 Code/docs/temp/
-Code\config\settings.py
+Code/config/settings.py
 
 #===============================================================
 #前端忽略文件分割线
