@@ -1,8 +1,6 @@
-# <img src="Web/apps/web-antd/public/favicon.ico" alt="TianBa AI Logo" width="40" style="vertical-align: middle;"> TianBa AI 科研工具集成平台
+# <img src="Web/apps/web-antd/public/favicon.ico" alt="TianBa AI Logo" width="40" style="vertical-align: middle; margin-right: 10px;"> TianBa AI - 智能科研工具集成平台
 
 <div align="center">
-  <h3>🧬 智能科研AI解决方案平台</h3>
-  
   [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
   [![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com)
   [![React](https://img.shields.io/badge/React-18+-blue.svg)](https://reactjs.org)
