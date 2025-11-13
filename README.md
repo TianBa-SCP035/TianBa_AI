@@ -1,8 +1,6 @@
-# TianBa AI 科研工具集成平台
+# <img src="Web/apps/web-antd/public/favicon.ico" alt="TianBa AI Logo" width="40" style="vertical-align: middle;"> TianBa AI 科研工具集成平台
 
 <div align="center">
-  <img src="Web/apps/web-antd/public/favicon.ico" alt="TianBa AI Logo" width="120">
-  
   <h3>🧬 智能科研AI解决方案平台</h3>
   
   [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
