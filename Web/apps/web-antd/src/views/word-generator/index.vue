@@ -26,6 +26,15 @@ const diseaseOptions = ref([
   { value: 'autoimmune', label: '自身免疫' },
 ]);
 
+// 模糊匹配函数
+const filterOption = (input: string, option: any) => {
+  const label = option.label.toLowerCase();
+  const value = input.toLowerCase();
+  
+  // 检查输入的每个字符是否都存在于标签中
+  return [...value].every(char => label.includes(char));
+};
+
 const generateProjectPlan = async () => {
   if (!projectCode.value.trim()) {
     message.error('请输入项目编号');
@@ -161,7 +170,7 @@ const resetForm = () => {
                 size="large"
                 :disabled="loading"
                 show-search
-                :filter-option="(input, option) => option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0"
+                :filter-option="filterOption"
                 class="disease-select"
               >
                 <a-select-option
