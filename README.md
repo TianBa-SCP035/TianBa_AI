@@ -1,8 +1,7 @@
-<p align="center">
+<h1 align="center">
   <img src="Web/apps/web-antd/public/favicon.ico" alt="TianBa AI Logo" width="60" style="vertical-align: middle; margin-right: 15px;">
-</p>
-
-<h1 align="center">TianBa AI - 智能科研工具集成平台</h1>
+  TianBa AI - 智能科研工具集成平台
+</h1>
 
 <p align="center">
   <a href="https://python.org">
