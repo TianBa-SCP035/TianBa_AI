@@ -1,0 +1,55 @@
+OCR angle: 0
+
+OCR blocks:
+  Text: 江苏省实验动物质量合格证, Confidence: 1.00
+  Text: 第, Confidence: 1.00
+  Text: 合格证编号：B202503101068, Confidence: 0.99
+  Text: 百奥赛图(北京), Confidence: 1.00
+  Text: SYXK(京), Confidence: 0.98
+  Text: I, Confidence: 0.63
+  Text: 百奥赛图(北京)医药+技设, Confidence: 0.91
+  Text: 使用许可证号, Confidence: 1.00
+  Text: 实验单位名称, Confidence: 1.00
+  Text: 医药科技股份有, Confidence: 1.00
+  Text: 购买单位名称, Confidence: 1.00
+  Text: 2020-0020, Confidence: 1.00
+  Text: 有限公司, Confidence: 0.96
+  Text: 限公司, Confidence: 1.00
+  Text: SCXK(苏)2021-0005, Confidence: 0.98
+  Text: 百奥赛图江苏基因生：支有限公司, Confidence: 0.97
+  Text: 出售单位名称, Confidence: 1.00
+  Text: 生产许可证号, Confidence: 1.00
+  Text: 最后-次质量检测, Confidence: 0.90
+  Text: 蔡梦诗, Confidence: 1.00
+  Text: 质量负责人, Confidence: 1.00
+  Text: 质量检测单位, Confidence: 1.00
+  Text: 苏州西山生物技术有限公司, Confidence: 0.99
+  Text: 2025-01-24, Confidence: 1.00
+  Text: 民间, Confidence: 0.70
+  Text: 开证时间, Confidence: 1.00
+  Text: 2025-03-10, Confidence: 1.00
+  Text: 2025-03-11, Confidence: 1.00
+  Text: 购买日期, Confidence: 1.00
+  Text: 经手人, Confidence: 1.00
+  Text: 周杏萍, Confidence: 0.99
+  Text: 数量, Confidence: 1.00
+  Text: 动物规格, Confidence: 1.00
+  Text: 动物等级、品种品系, Confidence: 1.00
+  Text: 雄, Confidence: 0.99
+  Text: 雌, Confidence: 0.96
+  Text: 日龄, Confidence: 1.00
+  Text: 体重, Confidence: 1.00
+  Text: 73, Confidence: 1.00
+  Text: 0, Confidence: 0.90
+  Text: 13-16g, Confidence: 1.00
+  Text: 5W, Confidence: 0.99
+  Text: SPF级、B6, Confidence: 1.00
+  Text: 备注：小鼠名称：B-NDGmice项目号：25P013201, Confidence: 1.00
+  Text: 质量合格证查询电话：025-85485879, Confidence: 1.00
+  Text: nttps://zwfw.kxjst.jiangsu.gov.cn/jpaas/kjtszshjg/sellrecord/cetification?pcld=9f5320921beb4709b52919ae64cdb2bf,054184106583442fa3b520.., Confidence: 0.96
+  Text: 14/37, Confidence: 1.00
+
+Match results:
+  cert: B202503101068
+  prod: SCXK(苏)2021-0005
+  use: SYXK(京)2020-0020
