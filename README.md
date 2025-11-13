@@ -1,11 +1,13 @@
-<div align="center">
+<div>
   <img src="Web/apps/web-antd/public/favicon.ico" alt="TianBa AI Logo" width="60" style="vertical-align: middle; margin-right: 15px;">
-  <span style="vertical-align: middle; font-size: 1.5em; font-weight: bold;">TianBa AI - 智能科研工具集成平台</span>
+  <span style="vertical-align: middle; font-size: 2em; font-weight: bold;">TianBa AI - 智能科研工具集成平台</span>
 </div>
 
+<div align="center">
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://python.org)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Platform](https://img.shields.io/badge/platform-Windows-lightgrey.svg)](https://www.microsoft.com/windows)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](https://github.com/TianBa-SCP035/TianBa_AI)
+</div>
 
 
 ## 🎯 项目简介
