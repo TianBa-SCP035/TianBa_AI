@@ -8,7 +8,7 @@ const routes: RouteRecordRaw[] = [
       icon: 'mdi:file-document-outline',
       keepAlive: true,
       order: 1,
-      title: 'Word项目生成器',
+      title: 'Word方案生成器',
     },
     name: 'WordGenerator',
     path: '/word-generator',

@@ -72,6 +72,38 @@
           </div>
         </div>
         
+        <!-- 疾病类型和语言选择 -->
+        <div class="form-row">
+          <div class="form-group disease-type-group">
+            <label class="form-label">
+              疾病类型
+            </label>
+            <a-select
+              v-model:value="selectedDisease"
+              placeholder="请选择疾病类型"
+              class="disease-select"
+              :disabled="isGenerating"
+              :options="diseaseOptions"
+              :filter-option="filterOption"
+              show-search
+            />
+          </div>
+          
+          <div class="form-group language-group">
+            <label class="form-label">
+              语言
+            </label>
+            <div class="language-switch">
+              <span :class="{ active: !isEnglish }">中文</span>
+              <a-switch
+                v-model:checked="isEnglish"
+                :disabled="isGenerating"
+              />
+              <span :class="{ active: isEnglish }">English</span>
+            </div>
+          </div>
+        </div>
+        
         <div class="button-container">
           <button
             :disabled="isGenerating || !projectNumber.trim()"
@@ -232,8 +264,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeUnmount, watch, onMounted, nextTick } from 'vue';
+import { ref, onBeforeUnmount, watch, onMounted, nextTick, computed } from 'vue';
 import { useRoute } from 'vue-router';
+import { Select as ASelect, Switch as ASwitch } from 'ant-design-vue';
 
 // 计时器变量，用于在组件卸载时清理
 let progressInterval: number | null = null;
@@ -247,6 +280,31 @@ const reportGenerated = ref(false);
 const error = ref('');
 const reportBlobUrl = ref('');
 const showConfetti = ref(false);
+
+// 新增：疾病类型和语言选择
+const selectedDisease = ref('tumor');
+const selectedLanguage = ref('chinese');
+
+// 语言切换相关
+const isEnglish = computed({
+  get: () => selectedLanguage.value === 'english',
+  set: (value) => selectedLanguage.value = value ? 'english' : 'chinese'
+});
+
+// 疾病类型选项
+const diseaseOptions = [
+  { value: 'tumor', label: '肿瘤' },
+  { value: 'autoimmune', label: '自身免疫' }
+];
+
+// 模糊匹配函数
+const filterOption = (input: string, option: any) => {
+  const label = option.label.toLowerCase();
+  const value = input.toLowerCase();
+  
+  // 检查输入的每个字符是否都存在于标签中
+  return [...value].every(char => label.includes(char));
+};
 
 // 添加新的响应式变量存储文件信息
 const reportData = ref<ReportResponse | null>(null);
@@ -564,8 +622,9 @@ const generateReport = async (): Promise<void> => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          disease: "tumor",
-          language: "chinese",
+          disease: selectedDisease.value,
+          language: selectedLanguage.value,
+          function: 'generate',
           content: requestData
         }),
       }
@@ -806,7 +865,7 @@ watch((): string => route.path, (newPath: string, oldPath: string): void => {
 .report-generator-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 1.5rem 2.5rem;
+  padding: 1rem 2.5rem;
   border-radius: var(--radius);
   background-color: hsl(var(--card));
   color: hsl(var(--foreground));
@@ -891,21 +950,21 @@ watch((): string => route.path, (newPath: string, oldPath: string): void => {
 
 .report-header {
   text-align: center;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
   border-bottom: 1px solid hsl(var(--border));
   position: relative;
   z-index: 1;
 }
 
 .header-icon {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   position: relative;
   display: inline-block;
 }
 
 .icon-text {
-  font-size: 3.5rem;
+  font-size: 2.5rem;
   position: relative;
   z-index: 1;
   animation: bounce 2s ease-in-out infinite;
@@ -951,9 +1010,9 @@ watch((): string => route.path, (newPath: string, oldPath: string): void => {
 /* 使用 pulse 替代 */
 
 .report-title {
-  font-size: 2rem;
+  font-size: 1.85rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
   color: hsl(var(--foreground));
   background: linear-gradient(90deg, hsl(var(--foreground)), hsl(var(--primary)));
   -webkit-background-clip: text;
@@ -963,7 +1022,7 @@ watch((): string => route.path, (newPath: string, oldPath: string): void => {
 }
 
 .report-description {
-  font-size: 1rem;
+  font-size: 1.05rem;
   color: hsl(var(--muted-foreground));
 }
 
@@ -984,15 +1043,23 @@ watch((): string => route.path, (newPath: string, oldPath: string): void => {
 .form-row {
   display: flex;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-top: 0.75rem;
 }
 
 .project-number-group {
-  flex: 8;
+  flex: 7;
 }
 
 .end-day-group {
   flex: 2;
+}
+
+.disease-type-group {
+  flex: 5;
+}
+
+.language-group {
+  flex: 3;
 }
 
 .form-group {
@@ -1003,7 +1070,7 @@ watch((): string => route.path, (newPath: string, oldPath: string): void => {
 
 .form-label {
   font-weight: 500;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   color: hsl(var(--foreground));
   display: flex;
   align-items: center;
@@ -1020,7 +1087,7 @@ watch((): string => route.path, (newPath: string, oldPath: string): void => {
 
 .form-input {
   width: 100%;
-  padding: 0.875rem 1.25rem;
+  padding: 0.75rem 1.25rem;
   border-radius: calc(var(--radius) - 2px);
   border: 1px solid hsl(var(--input));
   background-color: hsl(var(--input-background));
@@ -1073,9 +1140,33 @@ watch((): string => route.path, (newPath: string, oldPath: string): void => {
   opacity: 1;
 }
 
+/* 选择框样式 */
+.disease-select {
+  width: 100%;
+  font-size: 18px;
+}
+
+.language-switch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.language-switch span {
+  font-size: 14px;
+  color: #666;
+  transition: color 0.3s ease;
+}
+
+.language-switch span.active {
+  color: #1890ff;
+  font-weight: 500;
+}
+
 .button-container {
   display: flex;
   justify-content: center;
+  margin-bottom: 0.1rem;
 }
 
 .generate-button {
@@ -1149,6 +1240,7 @@ watch((): string => route.path, (newPath: string, oldPath: string): void => {
   flex-direction: column;
   gap: 1.25rem;
   padding: 2rem;
+  padding-top: 1.5rem;
   border-radius: calc(var(--radius) - 2px);
   background-color: hsl(var(--accent));
   border: 1px solid hsl(var(--border));
@@ -1156,7 +1248,7 @@ watch((): string => route.path, (newPath: string, oldPath: string): void => {
   overflow: hidden;
   opacity: 0.7;
   transition: opacity 0.3s ease;
-  margin-top: 1rem;
+  margin-top: 0.1rem;
 }
 
 .progress-section.active {
@@ -1167,7 +1259,7 @@ watch((): string => route.path, (newPath: string, oldPath: string): void => {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .progress-icon {
@@ -1182,7 +1274,7 @@ watch((): string => route.path, (newPath: string, oldPath: string): void => {
 }
 
 .progress-title {
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: hsl(var(--foreground));
   margin: 0;
@@ -1441,6 +1533,7 @@ watch((): string => route.path, (newPath: string, oldPath: string): void => {
   flex-direction: column;
   gap: 1.75rem;
   padding: 2rem;
+  padding-top: 3.5rem;
   border-radius: calc(var(--radius) - 2px);
   background-color: hsl(var(--accent));
   border: 1px solid hsl(var(--border));
