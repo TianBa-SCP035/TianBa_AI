@@ -1,9 +1,9 @@
-<h1>
-  <img src="Web/apps/web-antd/public/favicon.ico" alt="TianBa AI Logo" width="50" style="vertical-align: middle; margin-right: 20px;">
+<h1 style="font-size: 2.5em;">
+  <img src="Web/apps/web-antd/public/favicon.ico" alt="TianBa AI Logo" width="45" style="vertical-align: middle; margin-right: 20px;">
   TianBa AI - 智能科研平台
 </h1>
 
-<p align="center">
+<p>
   <a href="https://python.org">
     <img src="https://img.shields.io/badge/python-3.8%2B-blue.svg" alt="Python">
   </a>
