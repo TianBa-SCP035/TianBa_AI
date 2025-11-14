@@ -59,10 +59,10 @@ def fill_word_template(excel_path, template_path, output_path, experiment_id=Non
     doc = DocxTemplate(str(template_path))
     
     if experiment_id and photo_dir:
-        context["mouse"], context["tumor"] = [
-            process_image_data(os.path.join(photo_dir, experiment_id, folder), doc) 
-            for folder in ["mouse", "tumor"]
-        ]
+        # 处理所有类型的图片
+        image_types = ["mouse", "tumor", "anatomy", "organ"]
+        for folder in image_types:
+            context[folder] = process_image_data(os.path.join(photo_dir, experiment_id, folder), doc)
     
     # 渲染模板
     jenv = _build_jinja_env(sandbox=True)
