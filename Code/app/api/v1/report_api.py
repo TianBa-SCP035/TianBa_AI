@@ -16,9 +16,12 @@ if str(project_root) not in sys.path: sys.path.insert(0, str(project_root))
 
 # 导入配置
 from config.settings import API_HOST, PROJECT_REPORT_API_PORT
+from app.utils.Log.log_utils import add_api_logging, log_request_body
 
 # 创建FastAPI应用
 app = FastAPI(title="TianBa AI - Project Report API")
+# 添加API日志记录
+add_api_logging(app)
 
 # 添加CORS中间件
 app.add_middleware(
@@ -43,6 +46,8 @@ class ProjectReportRequest(BaseModel):
 @router.post("/execute")
 async def execute_project_report_function(request: ProjectReportRequest):
     """动态执行指定模块的指定函数"""
+    # 记录请求体数据
+    log_request_body(request.dict())
     # 构建模块名
     module_name = f"app.api.v1.project_report.{request.disease}_{request.language}"
     
