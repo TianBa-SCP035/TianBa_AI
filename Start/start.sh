@@ -15,7 +15,7 @@ cd "$FRONTEND_DIR" && nohup serve -s dist -l 8080 > "$LOG_DIR/frontend.log" 2>&1
 echo "前端服务已启动: http://172.16.1.148:8080"
 
 # 启动后端
-cd "$BACKEND_DIR" && nohup stdbuf -oL -eL python3 -u -m app.main.main 2>&1 | grep -iE --line-buffered '(get|post|options|http)' >> "$LOG_DIR/backend.log" &
+cd "$BACKEND_DIR" && nohup stdbuf -oL -eL python3 -u -m app.main.main 2>&1 | grep -iE --line-buffered '(get|post|options|http)' > "$LOG_DIR/backend.log" &
 echo "项目方案已启动: http://172.16.1.148:6001"
 echo "项目报告已启动: http://172.16.1.148:6002"
 # 等待服务启动
