@@ -8,13 +8,13 @@ from contextlib import redirect_stdout, redirect_stderr
 current_dir = pathlib.Path(__file__).resolve().parent
 if str(current_dir) not in sys.path: sys.path.insert(0, str(current_dir))
 
-# 本地模块导入
-from excel_download import download_project_file
-from sup_info import update_supplement_info
-from form_7_1 import extract_weight_for_word
-from form_7_2 import extract_tumor_volume_for_word
-from form_7_3 import extract_table
-from add_second import process_excel_file
+# 本地模块导入 - 使用相对导入
+from .excel_download import download_project_file
+from .sup_info import update_supplement_info
+from .form_7_1 import extract_weight_for_word
+from .form_7_2 import extract_tumor_volume_for_word
+from .form_7_3 import extract_table
+from .add_second import process_excel_file
 
 def capture_output(func, *args, **kwargs):
     """捕获函数执行的输出,避免重复使用io.StringIO代码"""
