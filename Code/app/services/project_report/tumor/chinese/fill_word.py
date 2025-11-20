@@ -3,7 +3,7 @@ import os
 import pandas as pd
 from jinja2 import Environment as JinjaEnv, Undefined
 from docxtpl import DocxTemplate
-from reloading import process_image_data
+from .reloading import process_image_data
 
 try:
     from jinja2.sandbox import SandboxedEnvironment as JinjaSandboxEnv
