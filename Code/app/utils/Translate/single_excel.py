@@ -5,11 +5,22 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from openpyxl import load_workbook
 from translate import Translator
 
-def clean_translated_text(text, translator):
-    """清理翻译后的文本,移除HTML标签和多余空格"""
+def contains_chinese(text):
+    """检查文本是否包含中文字符"""
+    return bool(re.search(r'[\u4e00-\u9fff]', text))
+
+def clean_translated_text(text, translator, cache):
+    """清理翻译后的文本,移除HTML标签和多余空格，使用缓存避免重复翻译"""
+    # 如果缓存中已有翻译结果，直接返回
+    if text in cache:
+        return text, cache[text], None
+    
     try:
         translated = re.sub(r'<[^>]+>', '', translator.translate(text))
-        return text, re.sub(r'\s+', ' ', translated).strip(), None
+        translated = re.sub(r'\s+', ' ', translated).strip()
+        # 将翻译结果存入缓存
+        cache[text] = translated
+        return text, translated, None
     except Exception as e:
         return text, None, str(e)
 
@@ -32,7 +43,11 @@ def translate_excel_region(file_path, sheet_name, start_row, end_row, start_col,
             for col in range(ord(start_col.upper()) - ord('A') + 1, ord(end_col.upper()) - ord('A') + 2):
                 cell = ws.cell(row=row, column=col)
                 if cell.value and isinstance(cell.value, str):
-                    cells_to_translate.append((cell, cell.value))
+                    # 只翻译包含中文字符的单元格（中翻英时）
+                    # 或者不包含中文字符的单元格（英翻中时）
+                    text = cell.value.strip()
+                    if (direction == 1 and not contains_chinese(text)) or (direction != 1 and contains_chinese(text)):
+                        cells_to_translate.append((cell, text))
         
         if not cells_to_translate:
             print("没有找到需要翻译的文本内容")
@@ -42,11 +57,12 @@ def translate_excel_region(file_path, sheet_name, start_row, end_row, start_col,
         
         # 并发翻译
         translator = Translator(from_lang=from_lang, to_lang=to_lang)
+        translation_cache = {}
         completed_count = 0
         
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             future_to_cell = {
-                executor.submit(clean_translated_text, text, translator): (cell, text)
+                executor.submit(clean_translated_text, text, translator, translation_cache): (cell, text)
                 for cell, text in cells_to_translate
             }
             
