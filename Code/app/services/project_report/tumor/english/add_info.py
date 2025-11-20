@@ -7,28 +7,28 @@ import pandas as pd
 
 # 频率映射
 FREQ_MAP = {
-    "QD" : "每天给药一次",
-    "BID": "每天给药两次",
-    "TID": "每天给药三次",
-    "QW" : "每周给药一次",
-    "BIW": "每周给药两次",
-    "TIW": "每周给药三次",
-    "Q2D": "每两天给药一次",
-    "Q3D": "每三天给药一次",
-    "Q4D": "每四天给药一次",
-    "Q5D": "每五天给药一次",
-    "Q2W": "每两周给药一次",
+    "QD":  "dosed once daily",
+    "BID": "dosed twice daily",
+    "TID": "dosed three times daily",
+    "QW":  "dosed once weekly",
+    "BIW": "dosed twice weekly",
+    "TIW": "dosed three times weekly",
+    "Q2D": "dosed once every two days",
+    "Q3D": "dosed once every three days",
+    "Q4D": "dosed once every four days",
+    "Q5D": "dosed once every five days",
+    "Q2W": "dosed once every two weeks",
 }
 # 给药途径映射
 DOSE_ROUTE_MAP = {
-    "i.p.": "腹腔注射",
-    "i.v.": "尾静脉注射",
-    "s.c.": "皮下注射",
-    "p.o.": "口服",
-    "i.g.": "灌胃",
-    "i.n.": "滴鼻",
-    "i.t.": "瘤内注射",
-    "i.m.": "肌内注射",
+    "i.p.": "intraperitoneal injection",
+    "i.v.": "intravenous injection (tail vein)",
+    "s.c.": "subcutaneous injection",
+    "p.o.": "oral administration",
+    "i.g.": "intragastric gavage",
+    "i.n.": "intranasal administration",
+    "i.t.": "intratumoral injection",
+    "i.m.": "intramuscular injection",
 }
 
 VALID_FREQS = set(FREQ_MAP)
@@ -106,9 +106,9 @@ def generate_dose_summary(df_dose, group_col, route_col, freq_col, times_col):
         groups_str = "、".join(unique_groups)
         
         if len(unique_groups) == len(group_info):
-            route_texts.append(f"所有组给药途径均为{route_comb}")
+            route_texts.append(f"The route of administration for all groups was :{route_comb}")
         else:
-            route_texts.append(f"{groups_str}组给药途径均为{route_comb}")
+            route_texts.append(f"Groups {groups_str} were dosed via :{route_comb}")
     
     # 按给药频率分组
     freq_groups = {}
@@ -124,9 +124,9 @@ def generate_dose_summary(df_dose, group_col, route_col, freq_col, times_col):
         freq_desc = FREQ_MAP.get(freq.upper(), freq)
         
         if len(unique_groups) == len(group_info):
-            freq_texts.append(f"所有组{freq_desc}")
+            freq_texts.append(f"For all groups :{freq_desc}")
         else:
-            freq_texts.append(f"{groups_str}组{freq_desc}")
+            freq_texts.append(f"Groups {groups_str} were dosed :{freq_desc}")
     
     # 按给药次数分组
     times_groups = {}
@@ -141,20 +141,20 @@ def generate_dose_summary(df_dose, group_col, route_col, freq_col, times_col):
         groups_str = "、".join(unique_groups)
         
         if len(unique_groups) == len(group_info):
-            times_texts.append(f"所有组连续给药{times}次")
+            times_texts.append(f"All groups received {times} consecutive doses")
         else:
-            times_texts.append(f"{groups_str}组连续给药{times}次")
+            times_texts.append(f"Groups {groups_str} received {times} consecutive doses")
     
     # 组合所有文本
     all_texts = []
     if route_texts:
-        all_texts.append("；".join(route_texts))
+        all_texts.append("; ".join(route_texts))
     if freq_texts:
-        all_texts.append("；".join(freq_texts))
+        all_texts.append("; ".join(freq_texts))
     if times_texts:
-        all_texts.append("；".join(times_texts))
+        all_texts.append("; ".join(times_texts))
     
-    return "。".join(all_texts) + "。"
+    return ". ".join(all_texts) + ". "
 
 
 def annotate_b_min(
@@ -194,7 +194,7 @@ def annotate_b_min(
                 seen.add(p)
                 codes.append(p)
 
-    note_text = "；".join([f"{c}：{FREQ_MAP[c]}" for c in codes]) + ("；" if codes else "-")
+    note_text = "; ".join([f"{c}: {FREQ_MAP[c]}" for c in codes]) + ("; " if codes else "-")
 
     # 2. 生成组内受试品明细串
     for col in (group_col, prod_col, dose_col):
@@ -215,11 +215,11 @@ def annotate_b_min(
         g = r[group_col]
         p = r[prod_col]
         d = normalize_dose(r[dose_col])
-        group_to_items.setdefault(g, []).append(f"{p}（{d}）")
+        group_to_items.setdefault(g, []).append(f"{p}({d})")
 
     # 生成明细文本
     group_segments = [f"{g}: {'、'.join(items)}" for g, items in group_to_items.items()]
-    group_detail_text = "；".join(group_segments) if group_segments else "-"
+    group_detail_text = "; ".join(group_segments) if group_segments else "-"
 
     # 3. 生成给药信息汇总
     for col in (route_col, times_col):
