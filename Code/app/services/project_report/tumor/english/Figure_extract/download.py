@@ -10,7 +10,7 @@ current_dir = pathlib.Path(__file__).resolve().parent.parent.parent.parent.paren
 if str(current_dir) not in sys.path: sys.path.insert(0, str(current_dir))
 # 导入配置和模块
 from config.settings import SMB_CONFIG, PHOTO_DIR
-from app.services.project_report.tumor.chinese.Figure_extract.reduction import compress_experiment_images
+from app.services.project_report.tumor.english.Figure_extract.reduction import compress_experiment_images
 
 def download_images_from_smb(folder_name):
     """
