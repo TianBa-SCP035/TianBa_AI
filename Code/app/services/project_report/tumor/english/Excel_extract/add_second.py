@@ -45,9 +45,9 @@ def extract_and_format(excel_path: str, sheet: str, value_name: str, add_percent
     
     # 根据是否有中间文本决定返回格式
     if middle_text:
-        return f"{groups}组{middle_text}:{values}" if groups and values else "无数据"
+        return f"groups {groups}, {middle_text}:{values}" if groups and values else "无数据"
     else:
-        return f"{groups}组分别为:{values}" if groups and values else "无数据"
+        return f"groups {groups}, the values were: {values}" if groups and values else "无数据"
 
 def extract_g1_value(excel_path: str, sheet: str, value_name: str, extract_sign_prefix: bool = True) -> str:
     try:
@@ -101,7 +101,7 @@ def process_excel_file(excel_path: str) -> bool:
         g1_group_value = extract_g1_value(excel_path, "form_7_2", "分组天均值", extract_sign_prefix=True)
         g1_end_value = extract_g1_value(excel_path, "form_7_2", "结束天均值", extract_sign_prefix=False)
         # 提取受试组肿瘤体积数据
-        test_group_volume = extract_and_format(excel_path, "form_7_2", "结束天均值", add_percentage=False, add_unit="mm³", middle_text="的受试品在相应剂量下的平均肿瘤体积为")
+        test_group_volume = extract_and_format(excel_path, "form_7_2", "结束天均值", add_percentage=False, add_unit="mm³", middle_text="the mean tumor volume of the test article at the corresponding dose was")
 
         # 读/写"明细"
         try:
@@ -118,8 +118,8 @@ def process_excel_file(excel_path: str) -> bool:
             detail.to_excel(w, sheet_name="明细", index=False)
             # 调整列宽：第一列20，第二列50
             worksheet = w.sheets["明细"]
-            worksheet.column_dimensions['A'].width = 20
-            worksheet.column_dimensions['B'].width = 50
+            worksheet.column_dimensions['A'].width = 25
+            worksheet.column_dimensions['B'].width = 60
 
         print(f"✅ 已写入TGITV组合：{tgitv}")
         print(f"✅ 已写入TGITW组合：{tgitw}")
