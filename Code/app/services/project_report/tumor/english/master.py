@@ -10,12 +10,12 @@ if str(project_root) not in sys.path: sys.path.insert(0, str(project_root))
 # 添加当前目录到Python路径（确保相对导入正常工作）
 if str(current_dir) not in sys.path: sys.path.insert(0, str(current_dir))
 
-# 导入服务模块 - 使用绝对导入
-from export_sql import export_sql_to_excel
-from fill_word import fill_word_template
-from add_info import annotate_b_min
-from Excel_extract.All_Flow import all_flow
-from Figure_extract.download import download_images_from_smb
+# 导入服务模块 - 使用相对导入
+from .export_sql import export_sql_to_excel
+from .fill_word import fill_word_template
+from .add_info import annotate_b_min
+from .Excel_extract.All_Flow import all_flow
+from .Figure_extract.download import download_images_from_smb
 
 # 导入翻译工具函数
 from app.utils.Translate.single_excel import translate_excel_region

@@ -11,9 +11,9 @@ if str(project_root) not in sys.path: sys.path.insert(0, str(project_root))
 if str(current_dir) not in sys.path: sys.path.insert(0, str(current_dir))
 
 # 导入服务模块 - 使用相对导入
-from export_sql_service import export_sql_to_excel
-from fill_word_service import fill_word_template
-from add_info_service import annotate_b_min
+from .export_sql_service import export_sql_to_excel
+from .fill_word_service import fill_word_template
+from .add_info_service import annotate_b_min
 from config.settings import PLAN_OUT, PLAN_TEMP, PLAN_TPL
 from app.utils.Translate.single_excel import translate_excel_region
 
