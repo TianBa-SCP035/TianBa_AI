@@ -20,7 +20,9 @@ def get_engine(db_config: Dict[str, Any]) -> Engine:
         _engines[db_key] = create_engine(
             f"mysql+pymysql://{db_config['user']}:{password}"
             f"@{db_config['host']}:{db_config['port']}/{db_config['database']}"
-            f"?charset={db_config.get('charset', 'utf8mb4')}"
+            f"?charset={db_config.get('charset', 'utf8mb4')}",
+            pool_pre_ping=True,     # 取连接前先 ping，自动丢弃坏连接
+            pool_recycle=10800,     # 超过 3 小时（10800 秒）强制重建连接
         )
     return _engines[db_key]
 
