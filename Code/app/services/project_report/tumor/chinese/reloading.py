@@ -21,11 +21,11 @@ def extract_group_info(filename):
     return None, None
 
 def chunk3(items):
-    """把 items 每3个切成一行，不足补 None。"""
-    for i in range(0, len(items), 3):
-        chunk = items[i:i+3]
-        if len(chunk) < 3:
-            chunk.extend([None] * (3 - len(chunk)))
+    """把 items 每2个切成一行，不足补 None。"""
+    for i in range(0, len(items), 2):
+        chunk = items[i:i+2]
+        if len(chunk) < 2:
+            chunk.extend([None] * (2 - len(chunk)))
         yield chunk
 
 def process_folder(folder):
@@ -76,7 +76,7 @@ def process_images_for_docx(groups_list, base_folder, tpl):
                 if item:
                     img_path = Path(base_folder) / item['img']
                     row[i] = {
-                        'img': InlineImage(tpl, str(img_path), width=Mm(55)),#宽度控制
+                        'img': InlineImage(tpl, str(img_path), width=Mm(80), height=Mm(58)),#宽高控制
                         'name': item['name']
                     }
     return groups_list
