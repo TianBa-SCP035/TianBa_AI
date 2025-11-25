@@ -36,11 +36,17 @@ def compress_experiment_images(experiment_id, photo_dir):
     """压缩指定实验编号文件夹中的图片"""
     experiment_dir = os.path.join(photo_dir, experiment_id)
     
+    # 需要压缩的四种图片类型文件夹
     mouse_dir = os.path.join(experiment_dir, "mouse")
     tumor_dir = os.path.join(experiment_dir, "tumor")
+    anatomy_dir = os.path.join(experiment_dir, "anatomy")
+    organ_dir = os.path.join(experiment_dir, "organ")
     
+    # 压缩所有类型的图片
     compress_images_in_folder(mouse_dir)
     compress_images_in_folder(tumor_dir)
+    compress_images_in_folder(anatomy_dir)
+    compress_images_in_folder(organ_dir)
     print("✅ 图片压缩完成！")
 
 if __name__ == "__main__":
@@ -49,5 +55,8 @@ if __name__ == "__main__":
         experiment_id = sys.argv[1]
         compress_experiment_images(experiment_id)
     else:
+        # 压缩所有四种类型的图片
         compress_images_in_folder("mouse")
         compress_images_in_folder("tumor")
+        compress_images_in_folder("anatomy")
+        compress_images_in_folder("organ")
