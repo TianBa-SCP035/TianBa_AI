@@ -35,7 +35,9 @@ def generate_project_plan(project_code):
         result_excel_path = export_sql_to_excel(project_code, excel_path)
         
         # 3. 基于【给药方案】→"给药频率"写入明细页的"注释b"
-        annotate_b_min(result_excel_path)
+        try:
+            annotate_b_min(result_excel_path)
+        except: pass
         
         # 4. Excel → Word 模板替换
         fill_word_template(result_excel_path, template_path, word_output_path)
