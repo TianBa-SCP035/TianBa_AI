@@ -83,7 +83,8 @@ def generate_project_report(project_code, end_day=None):
         
         # 5. 翻译Excel中"明细"和"受试品信息"工作表
         try:
-            translate_excel_region(excel_path, "明细", 2, 100, "B", "B")
+            translate_excel_region(excel_path, "明细", 2, 39, "B", "B")#跳过动物许可证行
+            translate_excel_region(excel_path, "明细", 41, 100, "B", "B")
         except Exception as e:
             print(f"⚠️ 明细翻译失败: {str(e)}")
         try:
