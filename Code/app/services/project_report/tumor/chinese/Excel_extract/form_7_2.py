@@ -99,8 +99,10 @@ def fmt_pm(m, sd, d=1):
         return ""
     try:
         if d == 0:  # 如果d=0，表示只保留整数
-            return f"{int(round(float(m)))}±{int(round(float(sd)))}"
-        return f"{float(m):.{d}f}±{float(sd):.{d}f}"
+            # 添加容差处理，确保与Excel四舍五入一致
+            return f"{int(round(float(m) + 1e-06))}±{int(round(float(sd) + 1e-06))}"
+        # 添加容差处理，确保与Excel四舍五入一致
+        return f"{round(float(m) + 1e-06, d):.{d}f}±{round(float(sd) + 1e-06, d):.{d}f}"
     except (ValueError, TypeError):
         return ""
 
@@ -249,7 +251,7 @@ def extract_tumor_volume_for_word(xlsx_path: str,
                     except (ValueError, TypeError):
                         tgi = None
 
-            # 个体原始值（用于 Dunnett）：从“组别行 rs”到“均数行-1”都视作动物行
+            # 个体原始值（用于 Dunnett）：从"组别行 rs"到"均数行-1"都视作动物行
             if r_mean:
                 end_anim_row = r_mean - 1
             else:
