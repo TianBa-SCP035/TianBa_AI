@@ -83,7 +83,8 @@ def parse_float(x):
 def fmt_pm(m, sd, d=1):
     if m is None or sd is None:
         return ""
-    return f"{m:.{d}f}±{sd:.{d}f}"
+    # 添加容差处理，确保与Excel四舍五入一致
+    return f"{round(m + 1e-06, d):.{d}f}±{round(sd + 1e-06, d):.{d}f}"
 
 def auto_adjust_column_width(ws):
     """自动调整工作表列宽以适应内容"""
@@ -182,7 +183,7 @@ def extract_table(xlsx_in: str, xlsx_out: str) -> bool:
                 if vn is not None:
                     tgi = vn * 100 if (vn <= 1 and "%" not in str(raw)) else vn
             tgi_fmt = "-" if (tgi is None or gname == C["CONTROL_GROUP"]) \
-                      else f"{tgi:.{C['DECIMALS_TGI']}f}"
+                      else f"{round(tgi + 1e-06, C['DECIMALS_TGI']):.{C['DECIMALS_TGI']}f}"
 
             # 个体原始值：组别行 ~ 均数行-1
             end_anim = (r_mean - 1) if r_mean else re_
