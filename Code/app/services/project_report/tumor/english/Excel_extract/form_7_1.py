@@ -100,7 +100,10 @@ def parse_float(x):
 def fmt_pm(m, sd, d=1):
     if m is None or sd is None:
         return ""
-    return f"{m:.{d}f}±{sd:.{d}f}"
+    # 添加1e-06容差，确保与Excel四舍五入结果一致
+    m_rounded = round(m + 1e-06, d)
+    sd_rounded = round(sd + 1e-06, d)
+    return f"{m_rounded:.{d}f}±{sd_rounded:.{d}f}"
 
 def fmt_signed(x, d=1):
     if x is None:
@@ -238,9 +241,9 @@ def extract_weight_for_word(xlsx_path: str, out_xlsx_path: str, end_day: int) ->
                 s0 = parse_float(val_eff(ws, r_sd, col0))
                 sN = parse_float(val_eff(ws, r_sd, colN))
             
-            # 先对分组天和结束天的均值保留一位小数，再计算差值
-            m0_rounded = round(m0, C["DECIMALS"]) if m0 is not None else None
-            mN_rounded = round(mN, C["DECIMALS"]) if mN is not None else None
+            # 添加容差值处理浮点数精度问题，然后直接使用round函数
+            m0_rounded = round(m0 + 1e-06, C["DECIMALS"]) if m0 is not None else None
+            mN_rounded = round(mN + 1e-06, C["DECIMALS"]) if mN is not None else None
             delta = (mN_rounded - m0_rounded) if (mN_rounded is not None and m0_rounded is not None) else None
 
             rows_out.append({
@@ -330,8 +333,8 @@ def extract_weight_for_word(xlsx_path: str, out_xlsx_path: str, end_day: int) ->
             for rr in range(rs, end_anim_row + 1):  # 修改：从 rs 开始，而不是 rs + 1
                 v = parse_float(val_eff(ws, rr, colN))
                 if v is not None:
-                    # 在数据收集阶段就进行四舍五入，确保P值计算使用保留一位小数后的值
-                    v = round(v, C["DECIMALS"])
+                    # 使用Decimal进行精确四舍五入，与Excel保持一致
+                    v = round(v + 1e-06, 1)  # 添加容差值，保留1位小数
                     values.append(v)
                     long_rows.append({"group": group_name, "volume": float(v)})
             per_group_values[group_name] = values

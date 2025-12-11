@@ -8,6 +8,9 @@ R_CODE = r'''
 args <- commandArgs(trailingOnly=TRUE)
 control <- if (length(args)>=1) args[1] else "G1"
 
+# 设置固定随机种子确保结果可重现
+set.seed(5)
+
 # 需要的包
 if (!requireNamespace("multcomp", quietly=TRUE)) install.packages("multcomp", repos="https://cloud.r-project.org")
 if (!requireNamespace("jsonlite", quietly=TRUE)) install.packages("jsonlite",  repos="https://cloud.r-project.org")
