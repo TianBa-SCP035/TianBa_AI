@@ -2,7 +2,7 @@
 import platform, subprocess, tempfile, os, shutil, json
 
 # 如为 Windows，请修改为你本机 Rscript 路径；非 Windows 使用 PATH 中的 Rscript
-RSCRIPT_WIN = r"D:\R-4.5.1\R-4.5.1\bin\Rscript.exe"
+RSCRIPT_WIN = r"D:\工具类软件\R-4.5.2\bin\x64\Rscript.exe"
 
 R_CODE = r'''
 args <- commandArgs(trailingOnly=TRUE)
