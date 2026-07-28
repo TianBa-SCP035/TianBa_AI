@@ -72,6 +72,15 @@ SMB_CONFIG = {
     'password': '柳如烟'
 }
 
+# SMB连接配置 - 用于下载动物中心合格证 PDF
+CERT_SMB_CONFIG = {
+    'server_ip': '嘿嘿嘿哈',
+    'share_name': '曼波',
+    'base_path': '/动物中心存储文件/培训共享文件/合格证/2025年',
+    'username': '小帅',
+    'password': '柳如烟'
+}
+
 # 图片保存路径配置
 PHOTO_DIR = PROJECT_ROOT / "docs" / "temp" / "photo"
 PHOTO_DIR.mkdir(parents=True, exist_ok=True)

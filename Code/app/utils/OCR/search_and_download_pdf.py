@@ -1,10 +1,18 @@
 import os
 import re
+import sys
 from datetime import datetime
 from smb.SMBConnection import SMBConnection
 
+# 添加项目根目录到 Python 路径，便于导入配置
+project_root = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+)
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+from config.settings import CERT_SMB_CONFIG
+
 # 导入Hakimi模块用于解密
-import sys
 solve_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "Solve")
 sys.path.append(solve_path)
 from Hakimi import drmed
@@ -16,12 +24,12 @@ def download_certificate_by_project_number(project_number):
     参数:   project_number (str): 要搜索的项目编号，如'25P1156'
     返回:   list: 下载的文件路径列表
     """
-    # 固定连接参数
-    username = "BJ2724"
-    password = "***REMOVED***"
-    server_ip = "192.168.8.66"
-    share_name = "动物中心"
-    base_path = "/动物中心存储文件/培训共享文件/合格证/2025年"
+    # 从配置文件读取 SMB 连接参数
+    username = CERT_SMB_CONFIG['username']
+    password = CERT_SMB_CONFIG['password']
+    server_ip = CERT_SMB_CONFIG['server_ip']
+    share_name = CERT_SMB_CONFIG['share_name']
+    base_path = CERT_SMB_CONFIG['base_path']
     
     downloaded_files = []
     conn = None
