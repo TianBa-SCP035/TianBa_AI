@@ -42,28 +42,39 @@ def _format_ymd(year, month, day):
         return None
     return f"{year:04d}.{month:02d}.{day:02d}"
 
-def _format_photo_date(date_raw):
-    """从文件名剩余部分抠出日期，统一成 YYYY.MM.DD。"""
+def _find_photo_date(date_raw):
+    """从文件名剩余部分抠出日期，返回 (YYYY.MM.DD, match)。"""
     if not date_raw:
-        return None
-    date_raw = date_raw.strip(" -")
+        return None, None
     sep = _SEP_DATE_RE.search(date_raw)
     if sep:
-        return _format_ymd(*sep.groups())
+        formatted = _format_ymd(*sep.groups())
+        if formatted:
+            return formatted, sep
     compact = _COMPACT_DATE_RE.search(date_raw)
     if compact:
-        return _format_ymd(*compact.groups())
-    return None
+        formatted = _format_ymd(*compact.groups())
+        if formatted:
+            return formatted, compact
+    return None, None
 
 def extract_group_info(filename):
-    """从文件名提取组和日期。容忍空格、中英文横杠、下划线和常见日期写法。"""
+    """从文件名提取组、日期，以及把日期规范成 YYYY.MM.DD 后的显示名（保留鼠号）。"""
     stem = _normalize_stem(filename)
     group_match = _GROUP_RE.search(stem)
     if not group_match:
-        return None, None
+        return None, None, None
     group = f"G{int(group_match.group(1))}"
     remainder = stem[group_match.end():]
-    return group, _format_photo_date(remainder)
+    formatted, match = _find_photo_date(remainder)
+    caption = stem
+    if formatted and match:
+        start = group_match.end() + match.start()
+        end = group_match.end() + match.end()
+        caption = stem[:start] + formatted + stem[end:]
+        caption = re.sub(r"\s*-\s*", "-", caption)
+        caption = re.sub(r"\s+", " ", caption).strip()
+    return group, formatted, caption
 
 def chunk3(items):
     """把 items 每2个切成一行，不足补 None。"""
@@ -82,7 +93,7 @@ def process_folder(folder):
     # 按组分类并构建上下文数据
     groups = {}
     for img_file in image_files:
-        group, date = extract_group_info(img_file.name)
+        group, date, caption = extract_group_info(img_file.name)
         if group:
             if group not in groups:
                 groups[group] = {
@@ -96,7 +107,7 @@ def process_folder(folder):
                 groups[group]["dates"].append(date)
             groups[group]["items"].append({
                 "img": img_file.name,
-                "name": f"{group}-{date}" if date else img_file.stem
+                "name": caption or img_file.stem
             })
     
     # 构建图片组数据列表
