@@ -1,24 +1,69 @@
+import re
 from pathlib import Path
 
+_IMAGE_EXTS = {".jpg", ".jpeg", ".png"}
+_DASH_TABLE = str.maketrans({
+    "\u2013": "-",  # en dash –
+    "\u2014": "-",  # em dash —
+    "\uff0d": "-",  # fullwidth －
+    "_": "-",
+})
+_EXT_RE = re.compile(r"\.(?:jpg|jpeg|png)$", re.I)
+_GROUP_RE = re.compile(r"G\s*(\d+)", re.I)
+_SEP_DATE_RE = re.compile(
+    r"(\d{4})\s*[.\-/年．。]\s*(\d{1,2})\s*[.\-/月．。]\s*(\d{1,2})\s*日?"
+)
+_COMPACT_DATE_RE = re.compile(r"(\d{4})(\d{2})(\d{2})")
+
 def get_image_files(folder):
-    """获取文件夹中的所有图片文件"""
+    """获取文件夹中的图片文件（jpg/jpeg/png）。"""
     folder_path = Path(folder)
     if not folder_path.exists():
         print(f"⚠️ 图片文件夹不存在: {folder}")
         return []
-    
-    return sorted([f for f in folder_path.glob("*.jpg") if f.is_file()])
+    return sorted(
+        f for f in folder_path.iterdir()
+        if f.is_file() and f.suffix.lower() in _IMAGE_EXTS
+    )
+
+def _normalize_stem(filename):
+    stem = _EXT_RE.sub("", str(filename).strip())
+    stem = stem.replace("\u3002", ".").replace("\uff0e", ".")
+    stem = stem.translate(_DASH_TABLE)
+    stem = re.sub(r"\s*-\s*", "-", stem)
+    return re.sub(r"\s+", " ", stem).strip()
+
+def _format_ymd(year, month, day):
+    try:
+        year, month, day = int(year), int(month), int(day)
+    except (TypeError, ValueError):
+        return None
+    if not (1 <= month <= 12 and 1 <= day <= 31):
+        return None
+    return f"{year:04d}.{month:02d}.{day:02d}"
+
+def _format_photo_date(date_raw):
+    """从文件名剩余部分抠出日期，统一成 YYYY.MM.DD。"""
+    if not date_raw:
+        return None
+    date_raw = date_raw.strip(" -")
+    sep = _SEP_DATE_RE.search(date_raw)
+    if sep:
+        return _format_ymd(*sep.groups())
+    compact = _COMPACT_DATE_RE.search(date_raw)
+    if compact:
+        return _format_ymd(*compact.groups())
+    return None
 
 def extract_group_info(filename):
-    """从文件名提取组和日期信息"""
-    parts = filename.split('-')
-    if len(parts) >= 2:
-        group = parts[0]  # G1
-        date = parts[1]   # 20250901
-        # 将日期格式化为 2025.09.01
-        formatted_date = f"{date[:4]}.{date[4:6]}.{date[6:8]}"
-        return group, formatted_date
-    return None, None
+    """从文件名提取组和日期。容忍空格、中英文横杠、下划线和常见日期写法。"""
+    stem = _normalize_stem(filename)
+    group_match = _GROUP_RE.search(stem)
+    if not group_match:
+        return None, None
+    group = f"G{int(group_match.group(1))}"
+    remainder = stem[group_match.end():]
+    return group, _format_photo_date(remainder)
 
 def chunk3(items):
     """把 items 每2个切成一行，不足补 None。"""
@@ -51,7 +96,7 @@ def process_folder(folder):
                 groups[group]["dates"].append(date)
             groups[group]["items"].append({
                 "img": img_file.name,
-                "name": img_file.stem
+                "name": f"{group}-{date}" if date else img_file.stem
             })
     
     # 构建图片组数据列表

@@ -12,6 +12,37 @@ if str(current_dir) not in sys.path: sys.path.insert(0, str(current_dir))
 from config.settings import SMB_CONFIG, PHOTO_DIR
 from app.services.project_report.tumor.english.Figure_extract.reduction import compress_experiment_images
 
+# 远程文件夹按关键词归类；先匹配更具体的类型，避免“小鼠肿瘤”被算成动物。
+_TYPE_KEYS = (
+    ("organ", ("脏器", "器官")),
+    ("anatomy", ("解剖",)),
+    ("tumor", ("肿瘤",)),
+    ("mouse", ("动物", "小鼠", "老鼠")),
+)
+
+def classify_remote_folder(name):
+    """把远程文件夹名归到 mouse/tumor/anatomy/organ。"""
+    text = (name or "").replace(" ", "")
+    if not text or text in (".", ".."):
+        return None
+    for local_folder, keys in _TYPE_KEYS:
+        if any(key in text for key in keys):
+            return local_folder
+    return None
+
+def list_remote_folders(server_ip, username, password, share_name, remote_folder_path):
+    conn = None
+    try:
+        conn = SMBConnection(username, password, "client", server_ip)
+        conn.connect(server_ip, 139)
+        items = conn.listPath(share_name, remote_folder_path)
+        return [item.filename for item in items if item.isDirectory and item.filename not in (".", "..")]
+    except Exception:
+        return []
+    finally:
+        if conn:
+            conn.close()
+
 def download_images_from_smb(folder_name):
     """
     从SMB共享目录下载指定文件夹中的图片
@@ -28,14 +59,7 @@ def download_images_from_smb(folder_name):
     # 本地保存路径 - 在Photo文件夹下按实验编号创建子文件夹
     photo_dir = PHOTO_DIR
     experiment_dir = os.path.join(photo_dir, folder_name)
-    
-    # 图片类型映射（远程文件夹名: 本地文件夹名）
-    image_types = {
-        "动物图片": "mouse",
-        "肿瘤图片": "tumor",
-        "解剖图片": "anatomy",
-        "脏器图片": "organ"
-    }
+    local_folders = ("mouse", "tumor", "anatomy", "organ")
     
     # 确保Photo文件夹存在
     os.makedirs(photo_dir, exist_ok=True)
@@ -46,18 +70,24 @@ def download_images_from_smb(folder_name):
     os.makedirs(experiment_dir, exist_ok=True)
     
     # 创建所有图片类型的子文件夹
-    for local_folder in image_types.values():
+    for local_folder in local_folders:
         os.makedirs(os.path.join(experiment_dir, local_folder), exist_ok=True)
     
     # 目标文件夹路径
     target_folder_path = f"{base_path}/{folder_name}"
     
-    # 下载所有类型的图片
+    # 列出实验目录下的远程文件夹，按关键词归类后再下载
     total_count = 0
-    for remote_folder, local_folder in image_types.items():
-        count = download_folder_files(server_ip, username, password, share_name, 
-                                    f"{target_folder_path}/{remote_folder}", 
-                                    os.path.join(experiment_dir, local_folder))
+    remote_dirs = list_remote_folders(server_ip, username, password, share_name, target_folder_path)
+    for remote_folder in remote_dirs:
+        local_folder = classify_remote_folder(remote_folder)
+        if not local_folder:
+            continue
+        count = download_folder_files(
+            server_ip, username, password, share_name,
+            f"{target_folder_path}/{remote_folder}",
+            os.path.join(experiment_dir, local_folder),
+        )
         total_count += count
     
     # 打印下载结果

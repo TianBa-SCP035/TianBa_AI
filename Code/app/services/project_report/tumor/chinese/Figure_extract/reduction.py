@@ -1,18 +1,22 @@
 import os
+from pathlib import Path
 from PIL import Image
 import threading
 
 def compress_image(file_path):
-    """压缩单个图片文件，分辨率改为原来的三分之一"""
+    """压缩单个图片文件，分辨率改为原来的三分之一；统一存成 .jpg。"""
     try:
-        with Image.open(file_path) as img:
-            if img.mode == 'RGBA':
-                img = img.convert('RGB')
-            
+        src = Path(file_path)
+        dest = src.with_suffix(".jpg")
+        with Image.open(src) as img:
+            if img.mode in ("RGBA", "P"):
+                img = img.convert("RGB")
             width, height = img.size
             new_size = (width // 3, height // 3)
             img = img.resize(new_size, Image.Resampling.NEAREST)
-            img.save(file_path, format='JPEG', quality=50, optimize=False)
+            img.save(dest, format="JPEG", quality=50, optimize=False)
+        if dest.resolve() != src.resolve() and src.exists():
+            src.unlink()
     except:
         pass
 
@@ -23,7 +27,7 @@ def compress_images_in_folder(folder_path):
 
     threads = []
     for filename in os.listdir(folder_path):
-        if filename.lower().endswith(('.jpg', '.jpeg', '.png', '.bmp', '.gif')):
+        if filename.lower().endswith(('.jpg', '.jpeg', '.png')):
             file_path = os.path.join(folder_path, filename)
             thread = threading.Thread(target=compress_image, args=(file_path,))
             threads.append(thread)
