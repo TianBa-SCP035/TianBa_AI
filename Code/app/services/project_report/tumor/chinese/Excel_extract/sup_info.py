@@ -16,8 +16,12 @@ def extract_max_end_day(excel_file: str) -> int:
                 max_day = max(max_day, day)
                 continue
             
-            # 匹配英文格式：X Day Post Inoculation
-            match = re.search(r'(\d+)\s+Day\s+Post\s+Inoculation', sheet_name, re.IGNORECASE)
+            # 匹配英文格式：X Day Post Grouping / X Day Post Inoculation
+            match = re.search(
+                r"(\d+)\s+Day\s+Post\s+(?:Grouping|Inoculation)",
+                sheet_name,
+                re.IGNORECASE,
+            )
             if match:
                 day = int(match.group(1))
                 max_day = max(max_day, day)
